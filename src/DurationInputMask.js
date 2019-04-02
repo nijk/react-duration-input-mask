@@ -30,7 +30,7 @@ class DurationInputMask extends Component {
     super();
 
     this.state = {
-      value: props.value,
+      value: this.mask(props.value),
     };
 
     this.ref = null;
@@ -48,6 +48,30 @@ class DurationInputMask extends Component {
     if (prevProps.value !== value) {
       this.setState({ value });
     }
+  }
+
+  mask(value = this.state) {
+    const minute = 60;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+
+    const hours = value % day;
+    const minutes = value % hour;
+    const seconds = value % minute;
+
+    const mask = {
+      d: value > day ? Math.floor(value / day) : 0,
+      h: hours > 0 ? Math.floor(hours / hour) : 0,
+      m: minutes > 0 ? Math.floor(minutes / minute) : 0,
+      s: seconds,
+    };
+
+    console.log('mask', mask);
+
+    return Object.keys(mask).reduce((prev, key) => {
+      const value = mask[key];
+      return value ? `${prev} ${value}${key}` : prev;
+    }, '');
   }
 
   onBlur = ev => {

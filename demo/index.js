@@ -5,12 +5,12 @@ import DurationInputMask from '../src/DurationInputMask';
 
 class App extends Component {
   state = {
-    title: 'foo',
+    value: 3600 * 24 * 1.2,
   };
 
   handleChange = (value) => {
     console.log('change', value);
-    this.setState({ title: value });
+    this.setState({ value });
   };
 
   handleEvent = (ev, value) => {
@@ -19,17 +19,17 @@ class App extends Component {
   };
 
   render() {
+    const { value } = this.state;
+
     return (
-      <div className="App">
-        <DurationInputMask
-          value={this.state.title}
-          autoFocus
-          onBlur={this.handleEvent}
-          onChange={this.handleChange}
-          onKeyDown={this.handleEvent}
-          onKeyUp={this.handleEvent}
-        />
-      </div>
+      <DurationInputMask
+        // autoFocus
+        // onBlur={this.handleEvent}
+        // onChange={this.handleChange}
+        // onKeyDown={this.handleEvent}
+        // onKeyUp={this.handleEvent}
+        value={value}
+      />
     );
   }
 }
