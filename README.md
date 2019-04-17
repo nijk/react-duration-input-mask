@@ -1,5 +1,8 @@
 # React Duration Input Mask
 
+### Documentation
+You can find the [docs and demos here](https://react-duration-input-mask.netlify.com/)
+
 ### Tests
 `yarn test`
 
@@ -7,6 +10,6 @@
 `yarn run lint`
 
 ### Dev
-Runs the rollup dev server with file watching on both the src and demo
+Runs the docz dev server with file watching
 
-`yarn run dev`
+`yarn run docz:dev`

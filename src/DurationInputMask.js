@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import matchAll from 'string.prototype.matchall';
 
 import { isFunction, omit } from './utils';
 
@@ -13,6 +14,8 @@ const propTypes = {
   value: PropTypes.string,
 };
 
+matchAll.shim();
+
 class DurationInputMask extends Component {
   static propTypes = propTypes;
 
@@ -25,6 +28,10 @@ class DurationInputMask extends Component {
     onKeyUp: null,
     value: '',
   };
+
+  minute = 60;
+  hour = 60 * this.minute;
+  day = 24 * this.hour;
 
   constructor(props) {
     super();
@@ -46,70 +53,93 @@ class DurationInputMask extends Component {
     const { value } = this.props;
 
     if (prevProps.value !== value) {
-      this.setState({ value });
+      this.setState({ value: this.mask(value) });
     }
+  }
+
+  convertToInteger(value = '') {
+    if (typeof value === 'number' || /^[0-9 ]+$/.test(value)) {
+      return parseInt(value || 0, 10);
+    }
+
+    const match = value.matchAll(/(?<value>\d*)(?<unit>\w)/gi);
+
+    const volumes = {
+      m: this.minute,
+      h: this.hour,
+      d: this.day,
+      s: 1,
+    };
+
+    return [...match].reduce((prev, curr) => {
+      const unit = curr[2];
+
+      return unit.length && volumes[unit] ? prev + volumes[unit] * curr[1] : prev;
+    }, 0);
   }
 
   mask(value = this.state) {
-    const minute = 60;
-    const hour = 60 * minute;
-    const day = 24 * hour;
+    const intValue = this.convertToInteger(value);
 
-    const hours = value % day;
-    const minutes = value % hour;
-    const seconds = value % minute;
+    const hours = intValue % this.day;
+    const minutes = intValue % this.hour;
+    const seconds = intValue % this.minute;
 
-    const mask = {
-      d: value > day ? Math.floor(value / day) : 0,
-      h: hours > 0 ? Math.floor(hours / hour) : 0,
-      m: minutes > 0 ? Math.floor(minutes / minute) : 0,
+    const duration = {
+      d: intValue > this.day ? Math.floor(intValue / this.day) : 0,
+      h: hours > 0 ? Math.floor(hours / this.hour) : 0,
+      m: minutes > 0 ? Math.floor(minutes / this.minute) : 0,
       s: seconds,
     };
 
-    console.log('mask', mask);
-
-    return Object.keys(mask).reduce((prev, key) => {
-      const value = mask[key];
-      return value ? `${prev} ${value}${key}` : prev;
-    }, '');
+    return Object.keys(duration)
+      .reduce((prev, key) => {
+        const durationValue = duration[key];
+        return durationValue ? `${prev} ${durationValue}${key}` : prev;
+      }, '')
+      .trimStart();
   }
 
-  onBlur = ev => {
+  onBlur = event => {
     const { value } = this.state;
-    const { onBlur } = this.props;
+    const nextValue = this.mask(value);
 
-    if (isFunction(onBlur)) {
-      onBlur(ev, value);
-    }
+    this.setState({ value: nextValue }, () => {
+      const { onBlur } = this.props;
+
+      if (isFunction(onBlur)) {
+        onBlur(event, nextValue);
+      }
+    });
   };
 
-  onChange = ev => {
-    const { value } = ev.target;
+  onChange = event => {
+    const { value } = event.target;
 
     this.setState({ value }, () => {
       const { onChange } = this.props;
 
       if (isFunction(onChange)) {
-        onChange(value);
+        onChange(event, value);
       }
     });
   };
 
-  onKeyDown = ev => {
-    const { value } = ev.target;
+  onKeyDown = event => {
+    const { value } = event.target;
     const { onKeyDown } = this.props;
 
     if (isFunction(onKeyDown)) {
-      onKeyDown(ev, value);
+      onKeyDown(event, value);
     }
   };
 
-  onKeyUp = ev => {
-    const { value } = ev.target;
+  onKeyUp = event => {
+    const { value } = event.target;
     const { onKeyUp } = this.props;
 
     if (isFunction(onKeyUp)) {
-      onKeyUp(ev, value);
+      onKeyUp(event, value);
     }
   };
 

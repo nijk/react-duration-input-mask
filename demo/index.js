@@ -5,17 +5,13 @@ import DurationInputMask from '../src/DurationInputMask';
 
 class App extends Component {
   state = {
-    value: 3600 * 24 * 1.2,
+    value: 61,
   };
 
-  handleChange = (value) => {
-    console.log('change', value);
+  handleEvent = (event, value) => {
+    event.persist && event.persist();
+
     this.setState({ value });
-  };
-
-  handleEvent = (ev, value) => {
-    ev.persist();
-    console.log(ev.type, ev, value);
   };
 
   render() {
@@ -23,9 +19,9 @@ class App extends Component {
 
     return (
       <DurationInputMask
-        // autoFocus
+        autoFocus
         // onBlur={this.handleEvent}
-        // onChange={this.handleChange}
+        // onChange={this.handleEvent}
         // onKeyDown={this.handleEvent}
         // onKeyUp={this.handleEvent}
         value={value}
