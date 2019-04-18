@@ -1,6 +1,6 @@
 # React Duration Input Mask
 
-[![Build Status](https://travis-ci.org/nijk/react-duration-input-mask.png?branch=master)](https://travis-ci.org/nijk/react-duration-input-mask) [![codecov](https://codecov.io/gh/nijk/react-duration-input-mask/branch/master/graph/badge.svg)](https://codecov.io/gh/nijk/react-duration-input-mask)
+[![npm version](https://badge.fury.io/js/react-duration-input-mask.svg)](https://badge.fury.io/js/react-duration-input-mask) [![Build Status](https://travis-ci.org/nijk/react-duration-input-mask.png?branch=master)](https://travis-ci.org/nijk/react-duration-input-mask) [![codecov](https://codecov.io/gh/nijk/react-duration-input-mask/branch/master/graph/badge.svg)](https://codecov.io/gh/nijk/react-duration-input-mask)
 
 [![https://nodei.co/npm/react-duration-input-mask.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/react-duration-input-mask.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/react-duration-input-mask)
 
