@@ -65,7 +65,7 @@ const CJS = {
   ],
 };
 
-const minify = (config) => ({
+const minify = config => ({
   ...config,
   output: {
     ...config.output,

@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import matchAll from 'string.prototype.matchall';
 
 import { isFunction, omit } from './utils';
+
+matchAll.shim();
 
 const propTypes = {
   autoFocus: PropTypes.bool,
@@ -14,9 +16,7 @@ const propTypes = {
   value: PropTypes.string,
 };
 
-matchAll.shim();
-
-class DurationInputMask extends Component {
+class DurationInputMask extends PureComponent {
   static propTypes = propTypes;
 
   static defaultProps = {
@@ -30,7 +30,9 @@ class DurationInputMask extends Component {
   };
 
   minute = 60;
+
   hour = 60 * this.minute;
+
   day = 24 * this.hour;
 
   constructor(props) {
@@ -44,7 +46,9 @@ class DurationInputMask extends Component {
   }
 
   componentDidMount() {
-    if (this.props.autoFocus && this.ref) {
+    const { autoFocus } = this.props;
+
+    if (autoFocus && this.ref) {
       this.ref.focus();
     }
   }
@@ -56,6 +60,49 @@ class DurationInputMask extends Component {
       this.setState({ value: this.mask(value) });
     }
   }
+
+  onBlur = (event) => {
+    const { value } = this.state;
+    const nextValue = this.mask(value);
+
+    this.setState({ value: nextValue }, () => {
+      const { onBlur } = this.props;
+
+      if (isFunction(onBlur)) {
+        onBlur(event, nextValue);
+      }
+    });
+  };
+
+  onChange = (event) => {
+    const { value } = event.target;
+
+    this.setState({ value }, () => {
+      const { onChange } = this.props;
+
+      if (isFunction(onChange)) {
+        onChange(event, value);
+      }
+    });
+  };
+
+  onKeyDown = (event) => {
+    const { value } = event.target;
+    const { onKeyDown } = this.props;
+
+    if (isFunction(onKeyDown)) {
+      onKeyDown(event, value);
+    }
+  };
+
+  onKeyUp = (event) => {
+    const { value } = event.target;
+    const { onKeyUp } = this.props;
+
+    if (isFunction(onKeyUp)) {
+      onKeyUp(event, value);
+    }
+  };
 
   convertToInteger(value = '') {
     if (typeof value === 'number' || /^[0-9 ]+$/.test(value)) {
@@ -100,61 +147,18 @@ class DurationInputMask extends Component {
       .trimStart();
   }
 
-  onBlur = event => {
-    const { value } = this.state;
-    const nextValue = this.mask(value);
-
-    this.setState({ value: nextValue }, () => {
-      const { onBlur } = this.props;
-
-      if (isFunction(onBlur)) {
-        onBlur(event, nextValue);
-      }
-    });
-  };
-
-  onChange = event => {
-    const { value } = event.target;
-
-    this.setState({ value }, () => {
-      const { onChange } = this.props;
-
-      if (isFunction(onChange)) {
-        onChange(event, value);
-      }
-    });
-  };
-
-  onKeyDown = event => {
-    const { value } = event.target;
-    const { onKeyDown } = this.props;
-
-    if (isFunction(onKeyDown)) {
-      onKeyDown(event, value);
-    }
-  };
-
-  onKeyUp = event => {
-    const { value } = event.target;
-    const { onKeyUp } = this.props;
-
-    if (isFunction(onKeyUp)) {
-      onKeyUp(event, value);
-    }
-  };
-
   render() {
     const { value } = this.state;
-    const { component: Component, ...props } = this.props;
+    const { component: ComponentProp, ...props } = this.props;
 
     return (
-      <Component
+      <ComponentProp
         {...omit(props, Object.keys(propTypes))}
         onBlur={this.onBlur}
         onChange={this.onChange}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
-        ref={ref => {
+        ref={(ref) => {
           this.ref = ref;
         }}
         value={value}
