@@ -1,8 +1,16 @@
 language: node_js
+
 node_js:
-  - "node"
+- "node"
+
 cache: yarn
+
+branches:
+  only:
+  - master
+
 install:
   - yarn install && yarn global add codecov
+
 script:
   - yarn test && codecov
