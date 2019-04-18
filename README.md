@@ -1,5 +1,9 @@
 # React Duration Input Mask
 
+[![Build Status](https://travis-ci.org/nijk/react-duration-input-mask.png?branch=master)](https://travis-ci.org/nijk/react-duration-input-mask)
+
+[![codecov](https://codecov.io/gh/nijk/react-duration-input-mask/branch/master/graph/badge.svg)](https://codecov.io/gh/nijk/react-duration-input-mask)
+
 ### Install
 `npm install react-duration-input-mask` or `yarn add react-duration-input-mask`
 
