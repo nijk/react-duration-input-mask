@@ -1,9 +1,13 @@
 {
   "name": "react-duration-input-mask",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A React component to render input masking for a duration: days, hours, minutes, seconds",
-  "main": "lib/cjs/react-duration-input-mask.js",
-  "module": "lib/esm/react-duration-input-mask.js",
+  "main": "publish/index.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "/dist",
+    "/publish"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nijk/react-duration-input-mask.git"
@@ -59,24 +63,18 @@
     "react": "^16.8"
   },
   "scripts": {
-    "prebuild": "yarn run build:clean",
-    "build": "yarn run build:esm && yarn run build:cjs && yarn run build:umd",
-    "build:clean": "rimraf dist/ && rimraf lib/",
-    "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir lib/cjs",
-    "build:esm": "cross-env BABEL_ENV=esm babel src --out-dir lib/esm",
-    "build:umd": "rollup -c && rimraf dist/index.esm.js",
+    "prebuild": "rimraf dist/ && rimraf .size-snapshot.json",
+    "build": "rollup -c",
     "prepublish": "yarn build",
-    "demo": "rollup -c rollup.config.demo.js",
-    "dev": "yarn run demo -w",
+    "dev": "docz dev",
     "dev:test": "jest --watch --verbose false",
-    "docz:dev": "docz dev",
     "docz:build": "docz build",
     "test": "jest",
     "lint": "./node_modules/prettier/bin-prettier.js --write src/**/*.js"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run lint && yarn run build && git add lib/* .size-snapshot.json",
+      "pre-commit": "yarn run lint && yarn run build && git add src/ .size-snapshot.json",
       "pre-push": "yarn test"
     }
   },

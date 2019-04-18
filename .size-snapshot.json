@@ -1,13 +1,13 @@
 {
-  "dist/index.umd.js": {
-    "bundled": 93319,
-    "minified": 43831,
-    "gzipped": 11764
+  "dist/index.cjs.js": {
+    "bundled": 13930,
+    "minified": 8240,
+    "gzipped": 2661
   },
-  "dist/index.umd.min.js": {
-    "bundled": 93319,
-    "minified": 43831,
-    "gzipped": 11764
+  "dist/index.cjs.min.js": {
+    "bundled": 13930,
+    "minified": 8240,
+    "gzipped": 2661
   },
   "dist/index.esm.js": {
     "bundled": 13715,
@@ -22,5 +22,15 @@
         "code": 7719
       }
     }
+  },
+  "dist/index.umd.js": {
+    "bundled": 93319,
+    "minified": 43831,
+    "gzipped": 11764
+  },
+  "dist/index.umd.min.js": {
+    "bundled": 93319,
+    "minified": 43831,
+    "gzipped": 11764
   }
 }
