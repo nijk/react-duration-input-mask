@@ -10,7 +10,8 @@
 ### Documentation
 You can find the [docs and demos here](https://react-duration-input-mask.netlify.com/)
 
-### Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+### Contributing
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 #### Development
 Runs the docz dev server with file watching
