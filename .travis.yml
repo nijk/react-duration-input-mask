@@ -1,16 +1,21 @@
 language: node_js
-
 node_js:
-- "node"
-
+- node
 cache: yarn
-
 branches:
   only:
   - master
-
 install:
-  - yarn install && yarn global add codecov
-
+- yarn install && yarn global add codecov
 script:
-  - yarn test && codecov
+- yarn test && codecov
+deploy:
+  provider: npm
+  email: "npmnijk@gmail.com"
+  api_key:
+    secure: 5Ieg567Rd1qF5EQvWyZsMz6WlksODbj04smAuX1gNqQX451kB2PinOqw3rrXj7+C2zxX7nQiQWRJuOZiZo4X/jAHNi9iE5PKibDWJO5CiPKVYtUx4vOz4HHrbHRpE0d5qjJdpoo5cptFHyKwGGYwOpWmMODXptmzEVG/4L8mmpGXl6TQ2DkaexPwfx8361piEc4dDguHnhSwHvcuY0/LzFeslE781AHQ93G/+z3YCiecTtcJeIb/3xBCOw4I2GDQwgG1G8Kq0YRKjt0wIpg8ld9W2BVdDwR0pnS2+NdNsoLPTjmOiOleJCXD52tFmG/GEua7rN2jVnhNNzKB0DuNKw88Vs7gJtE26o/LtCcUiDrAQ+oND3kTcFIbCBNg0+YySFCkuMOCYKL5OXflobljoYBcvh77YIH5QTGCq++tDb/PP0oTl+nXAQDjWuBbI1w5ixLFK4Xe+OKbYS40vFmCGdMYBLwBxYrWqiUQ/8QaLFmrOVvOxve70xcCRvh9Vh84A5laVMB6pPFAsdKMtnrukQPiWPcOPGOdF7zQeoZUKe63TU2a+7prDidzs5IIScecNbVFAFOU2SQstGc3trpf1BvuZhvaj3zo8vG1emXbsscKgIuvy87D4WATFBTukFLrO6epIQq8ch2IkF0KwttjEeI/OMedM1AnDt38IxkJvOk=
+  on:
+    branch: master
+    tags: true
+    repo: nijk/react-duration-input-mask
+  skip_cleanup: true

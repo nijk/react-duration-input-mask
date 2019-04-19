@@ -8,6 +8,9 @@
     "/dist",
     "/publish"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nijk/react-duration-input-mask.git"
@@ -79,7 +82,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run lint && yarn run build && git add src/ .size-snapshot.json",
+      "pre-commit": "yarn run lint",
       "pre-push": "yarn test"
     }
   },
