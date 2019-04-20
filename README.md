@@ -1,6 +1,6 @@
 # React Duration Input Mask
 
-[![npm version](https://img.shields.io/npm/v/react-duration-input-mask.svg)](https://www.npmjs.com/package/react-duration-input-mask) [![Build Status](https://img.shields.io/travis/nijk/react-duration-input-mask/master.svg)](https://travis-ci.org/nijk/react-duration-input-mask) [![codecov](https://codecov.io/gh/nijk/react-duration-input-mask/branch/master/graph/badge.svg)](https://codecov.io/gh/nijk/react-duration-input-mask) [![Bundle size](https://img.shields.io/bundlephobia/minzip/react-duration-input-mask.svg)(https://bundlephobia.com/result?p=react-duration-input-mask)]
+[![npm version](https://img.shields.io/npm/v/react-duration-input-mask.svg)](https://www.npmjs.com/package/react-duration-input-mask) [![Build Status](https://img.shields.io/travis/nijk/react-duration-input-mask/master.svg)](https://travis-ci.org/nijk/react-duration-input-mask) [![codecov](https://codecov.io/gh/nijk/react-duration-input-mask/branch/master/graph/badge.svg)](https://codecov.io/gh/nijk/react-duration-input-mask) [![Bundle size](https://img.shields.io/bundlephobia/minzip/react-duration-input-mask.svg)](https://bundlephobia.com/result?p=react-duration-input-mask)
 
 ### Install
 `npm install react-duration-input-mask` or `yarn add react-duration-input-mask`
