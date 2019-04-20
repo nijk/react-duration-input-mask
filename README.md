@@ -1,8 +1,6 @@
 # React Duration Input Mask
 
-[![npm version](https://badge.fury.io/js/react-duration-input-mask.svg)](https://badge.fury.io/js/react-duration-input-mask) [![Build Status](https://travis-ci.org/nijk/react-duration-input-mask.png?branch=master)](https://travis-ci.org/nijk/react-duration-input-mask) [![codecov](https://codecov.io/gh/nijk/react-duration-input-mask/branch/master/graph/badge.svg)](https://codecov.io/gh/nijk/react-duration-input-mask)
-
-[![https://nodei.co/npm/react-duration-input-mask.png?downloads=true&downloadRank=true&stars=true](https://nodei.co/npm/react-duration-input-mask.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/react-duration-input-mask)
+[![npm version](https://img.shields.io/npm/v/react-duration-input-mask.svg)](https://www.npmjs.com/package/react-duration-input-mask) [![Build Status](https://img.shields.io/travis/nijk/react-duration-input-mask/master.svg)](https://travis-ci.org/nijk/react-duration-input-mask) [![codecov](https://codecov.io/gh/nijk/react-duration-input-mask/branch/master/graph/badge.svg)](https://codecov.io/gh/nijk/react-duration-input-mask) [![Bundle size](https://img.shields.io/bundlephobia/minzip/react-duration-input-mask.svg)(https://bundlephobia.com/result?p=react-duration-input-mask)]
 
 ### Install
 `npm install react-duration-input-mask` or `yarn add react-duration-input-mask`
@@ -23,3 +21,16 @@ Runs the docz dev server with file watching
 
 #### Linting
 `yarn run lint`
+
+#### Publish
+
+Publish to npm registry from `master`
+
+##### Patch version
+`yarn version --patch && git push origin --tags`
+
+##### Minor version
+`yarn version --minor && git push origin --tags`
+
+##### Major version
+`yarn version --major && git push origin --tags`
