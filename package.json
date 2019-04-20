@@ -73,7 +73,7 @@
   "scripts": {
     "prebuild": "rimraf dist/ && rimraf .size-snapshot.json",
     "build": "rollup -c",
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "dev": "docz dev",
     "dev:test": "jest --watch --verbose false",
     "docz:build": "docz build",
