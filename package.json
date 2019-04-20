@@ -1,6 +1,6 @@
 {
   "name": "react-duration-input-mask",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A React component to render input masking for a duration: days, hours, minutes, seconds",
   "main": "publish/index.js",
   "module": "dist/index.esm.js",
