@@ -12,14 +12,22 @@ You can find the [docs and demos here](https://react-duration-input-mask.netlify
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 #### Development
-Runs the docz dev server with file watching
+Runs the docz dev server with file watching:
 
-`yarn run docz:dev`
+`yarn start`
 
 #### Tests
-`yarn test` or `yarn run dev:test`
+Run on push via husky and can be run separately:
+
+`yarn test`
+
+Or using file watch mode:
+
+`yarn run test:dev`
 
 #### Linting
+Run on commit via husky and can be run separately:
+
 `yarn run lint`
 
 #### Publish
