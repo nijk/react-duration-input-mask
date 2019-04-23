@@ -36,6 +36,20 @@ describe('Handles props', () => {
     expect(wrapper.prop('value')).toEqual('2m 1s');
   });
 
+  it('renders the props.value string', () => {
+    const value = '2m 1s';
+    const wrapper = shallow(<DurationInputMask value={value} />);
+
+    expect(wrapper.prop('value')).toEqual(value);
+  });
+
+  it('duplicate units are discarded', () => {
+    const value = '2d 1d';
+    const wrapper = shallow(<DurationInputMask value={value} />);
+
+    expect(wrapper.state('value')).toEqual('2d');
+  });
+
   it('renders an updated props.value', () => {
     const value = 121;
     const nextValue = 330;

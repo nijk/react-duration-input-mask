@@ -13,7 +13,7 @@ const propTypes = {
   onChange: PropTypes.func,
   onKeyDown: PropTypes.func,
   onKeyUp: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 class DurationInputMask extends PureComponent {
@@ -118,10 +118,19 @@ class DurationInputMask extends PureComponent {
       s: 1,
     };
 
-    return [...match].reduce((prev, curr) => {
-      const unit = curr[2];
+    // Ensure subsequent matches of same unit are filtered out, e.g. ['2d', '1d'] => ['2d']
+    const uniqueMatches = [...match].reduce((prev, item, index) => {
+      if (Object.keys(prev).find(prevKey => prev[prevKey][2] === item[2])) {
+        return prev;
+      }
 
-      return unit.length && volumes[unit] ? prev + volumes[unit] * curr[1] : prev;
+      return { ...prev, [index]: item };
+    }, {});
+
+    return Object.keys(uniqueMatches).reduce((prev, key) => {
+      const unit = uniqueMatches[key][2];
+
+      return unit.length && volumes[unit] ? prev + (volumes[unit] * uniqueMatches[key][1]) : prev;
     }, 0);
   }
 
