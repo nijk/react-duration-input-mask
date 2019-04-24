@@ -9,6 +9,7 @@ matchAll.shim();
 const propTypes = {
   autoFocus: PropTypes.bool,
   component: PropTypes.node,
+  maskOnChange: PropTypes.bool,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   onKeyDown: PropTypes.func,
@@ -22,6 +23,7 @@ class DurationInputMask extends PureComponent {
   static defaultProps = {
     autoFocus: false,
     component: 'input',
+    maskOnChange: true,
     onBlur: null,
     onChange: null,
     onKeyDown: null,
@@ -61,46 +63,48 @@ class DurationInputMask extends PureComponent {
     }
   }
 
-  onBlur = (event) => {
+  onBlur = () => {
     const { value } = this.state;
+    const { onBlur } = this.props;
     const nextValue = this.mask(value);
 
     this.setState({ value: nextValue }, () => {
-      const { onBlur } = this.props;
-
       if (isFunction(onBlur)) {
-        onBlur(event, nextValue);
+        onBlur(this.convertToInteger(value), nextValue, value);
       }
     });
   };
 
   onChange = (event) => {
+    const { onChange, maskOnChange } = this.props;
     const { value } = event.target;
+    const nextValue = this.mask(value);
+    const hasOnChangeFunction = isFunction(onChange);
 
-    this.setState({ value }, () => {
-      const { onChange } = this.props;
-
-      if (isFunction(onChange)) {
-        onChange(event, value);
-      }
-    });
+    if (hasOnChangeFunction && !maskOnChange) {
+      onChange(this.convertToInteger(value), nextValue, value);
+    } else {
+      this.setState({ value: maskOnChange ? nextValue : value }, () => {
+        if (hasOnChangeFunction) {
+          onChange(this.convertToInteger(value), nextValue, value);
+        }
+      });
+    }
   };
 
   onKeyDown = (event) => {
-    const { value } = event.target;
     const { onKeyDown } = this.props;
 
     if (isFunction(onKeyDown)) {
-      onKeyDown(event, value);
+      onKeyDown(event);
     }
   };
 
   onKeyUp = (event) => {
-    const { value } = event.target;
     const { onKeyUp } = this.props;
 
     if (isFunction(onKeyUp)) {
-      onKeyUp(event, value);
+      onKeyUp(event);
     }
   };
 
@@ -134,7 +138,7 @@ class DurationInputMask extends PureComponent {
     }, 0);
   }
 
-  mask(value = this.state) {
+  mask(value) {
     const intValue = this.convertToInteger(value);
 
     const hours = intValue % this.day;
@@ -167,9 +171,7 @@ class DurationInputMask extends PureComponent {
         onChange={this.onChange}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
-        ref={(ref) => {
-          this.ref = ref;
-        }}
+        ref={(ref) => { this.ref = ref; }}
         value={value}
       />
     );

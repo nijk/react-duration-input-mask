@@ -10,30 +10,56 @@ describe('Default behaviour', () => {
     expect(wrapper.find('input')).toHaveLength(1);
   });
 
-  it('onChange sets state.value', () => {
-    const mockHandler = jest.fn();
-    const wrapper = shallow(<DurationInputMask value="foo" onChange={mockHandler} />);
-    const nextValue = 'foo bar';
+  it('renders component prop', () => {
+    const component = 'textarea';
+    const wrapper = shallow(<DurationInputMask component={component} />);
+    expect(wrapper.find(component)).toHaveLength(1);
+  });
+
+  it('sets state.value', () => {
+    const value = '2m';
+    const wrapper = shallow(<DurationInputMask value={value} />);
+    const nextValue = '2m 1s';
     const event = { target: { value: nextValue } };
 
     wrapper.simulate('change', event);
-    expect(mockHandler).toHaveBeenCalledWith(event, nextValue);
+    expect(wrapper.state('value')).toEqual(nextValue);
   });
 });
 
 describe('Handles props', () => {
+  it('missing props.value is handled gracefully', () => {
+    const wrapper = shallow(<DurationInputMask />);
+
+    expect(wrapper.prop('value')).toEqual('');
+  });
+
+  it('props.value (number) is masked', () => {
+    const value = 121;
+    const wrapper = shallow(<DurationInputMask value={value} />);
+
+    expect(wrapper.state('value')).toEqual('2m 1s');
+  });
+
+  it('props.value (string) is masked', () => {
+    const value = '2m 1s';
+    const wrapper = shallow(<DurationInputMask value={value} />);
+
+    expect(wrapper.state('value')).toEqual(value);
+  });
+
+  it('props.value (string no units) is masked', () => {
+    const value = '121';
+    const wrapper = shallow(<DurationInputMask value={value} />);
+
+    expect(wrapper.state('value')).toEqual('2m 1s');
+  });
+
   it('spreads in the style prop', () => {
     const wrapper = shallow(<DurationInputMask style={{ color: 'blue' }} />);
     expect(wrapper.prop('style')).toMatchObject({
       color: 'blue',
     });
-  });
-
-  it('renders the props.value', () => {
-    const value = 121;
-    const wrapper = shallow(<DurationInputMask value={value} />);
-
-    expect(wrapper.prop('value')).toEqual('2m 1s');
   });
 
   it('renders the props.value string', () => {
@@ -45,6 +71,13 @@ describe('Handles props', () => {
 
   it('duplicate units are discarded', () => {
     const value = '2d 1d';
+    const wrapper = shallow(<DurationInputMask value={value} />);
+
+    expect(wrapper.state('value')).toEqual('2d');
+  });
+
+  it('invalid units are discarded', () => {
+    const value = '2d 1x';
     const wrapper = shallow(<DurationInputMask value={value} />);
 
     expect(wrapper.state('value')).toEqual('2d');
@@ -84,39 +117,86 @@ describe('Handles props', () => {
 
     expect(ref.focus).toHaveBeenCalled();
   });
+
+  it('value not masked when props.maskOnChange=false', () => {
+    const value = '2m';
+    const nextValue = '62m';
+    const wrapper = shallow(
+      <DurationInputMask value={value} maskOnChange={false} />,
+    );
+
+    wrapper.simulate('change', { target: { value: nextValue } });
+    expect(wrapper.state('value')).toEqual(nextValue);
+  });
+
+  it('state not updated when props.maskOnChange=false & props.onChange={fn}', () => {
+    const value = '2m';
+    const wrapper = shallow(
+      <DurationInputMask value={value} onChange={jest.fn()} maskOnChange={false} />,
+    );
+
+    wrapper.simulate('change', { target: { value: '2m 1s' } });
+    expect(wrapper.state('value')).toEqual(value);
+  });
+
+  it('event.target.value=undefined handled gracefully', () => {
+    const value = 61;
+    const wrapper = shallow(<DurationInputMask value={value} />);
+    const event = { target: { value: undefined } };
+
+    wrapper.simulate('change', event);
+
+    expect(wrapper.state('value')).toEqual('');
+  });
 });
 
 describe('Calls handlers', () => {
   it('props.onBlur called', () => {
     const mockHandler = jest.fn();
     const value = 121;
+    const maskedValue = '2m 1s';
+    const parsedValue = value;
+    const rawValue = maskedValue;
     const wrapper = mount(<DurationInputMask value={value} onBlur={mockHandler} />);
 
     wrapper.simulate('blur');
 
-    expect(mockHandler).toHaveBeenCalledWith(
-      expect.objectContaining({
-        type: 'blur',
-      }),
-      '2m 1s',
-    );
+    expect(mockHandler).toHaveBeenCalledWith(parsedValue, maskedValue, rawValue);
   });
 
   it('props.onChange called', () => {
     const mockHandler = jest.fn();
-    const value = 121;
-    const nextValue = '3m 32s';
+    const value = 61;
+    const nextValue = '1m 61s';
+    const maskedNextValue = '2m 1s';
+    const parsedNextValue = 121;
     const wrapper = shallow(<DurationInputMask value={value} onChange={mockHandler} />);
     const event = { target: { value: nextValue } };
 
     wrapper.simulate('change', event);
 
-    expect(mockHandler).toHaveBeenCalledWith(event, nextValue);
+    expect(mockHandler).toHaveBeenCalledWith(parsedNextValue, maskedNextValue, nextValue);
+  });
+
+  it('props.onChange called when proops.maskOnChange=false', () => {
+    const mockHandler = jest.fn();
+    const value = 61;
+    const nextValue = '1m 61s';
+    const maskedNextValue = '2m 1s';
+    const parsedNextValue = 121;
+    const wrapper = shallow(
+      <DurationInputMask value={value} onChange={mockHandler} maskOnChange={false} />,
+    );
+    const event = { target: { value: nextValue } };
+
+    wrapper.simulate('change', event);
+
+    expect(mockHandler).toHaveBeenCalledWith(parsedNextValue, maskedNextValue, nextValue);
   });
 
   it('props.onKeyDown called', () => {
     const mockHandler = jest.fn();
-    const value = 'foo';
+    const value = '2m 1s';
     const wrapper = mount(<DurationInputMask value={value} onKeyDown={mockHandler} />);
 
     wrapper.simulate('keydown', { which: 13, target: { value } });
@@ -126,14 +206,13 @@ describe('Calls handlers', () => {
         type: 'keydown',
         nativeEvent: expect.any(Object),
       }),
-      value,
     );
   });
 
   it('props.onKeyUp called', () => {
     const mockHandler = jest.fn();
     const value = '';
-    const nextValue = 'f';
+    const nextValue = '1';
     const wrapper = mount(<DurationInputMask value={value} onKeyUp={mockHandler} />);
 
     wrapper.simulate('keyup', { target: { value: nextValue } });
@@ -143,7 +222,6 @@ describe('Calls handlers', () => {
         type: 'keyup',
         nativeEvent: expect.any(Object),
       }),
-      nextValue,
     );
   });
 });

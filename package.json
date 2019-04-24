@@ -59,8 +59,8 @@
     "rollup-plugin-uglify": "^6.0.2"
   },
   "peerDependencies": {
-    "prop-types": "^15.7.2",
-    "react": "^16.8"
+    "prop-types": "^15.5.7",
+    "react": "^16.0"
   },
   "scripts": {
     "prebuild": "rimraf dist/ && rimraf .size-snapshot.json",
