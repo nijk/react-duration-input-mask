@@ -18,28 +18,28 @@ import DurationInputMask from './DurationInputMask'
 
 ## Handlers
 
-#### onBlur `onBlur={ (parsedValue, maskedValue, rawValue) => ... }`
+#### handleBlur `handleBlur={ (parsedValue, maskedValue, rawValue) => ... }`
 
 <Playground>
   <DurationInputMask
-    onBlur={(parsedValue, maskedValue, rawValue) => {
-      console.log('onBlur', parsedValue, maskedValue, rawValue);
+    handleBlur={(parsedValue, maskedValue, rawValue) => {
+      console.log('handleBlur', parsedValue, maskedValue, rawValue);
     }}
     maskOnChange={false}
     value={61}
   />
 </Playground>
 
-#### onChange `onChange={ (parsedValue, maskedValue, rawValue) => ... }`
+#### handleChange `handleChange={ (parsedValue, maskedValue, rawValue) => ... }`
 
-_N.B. If an `onChange` handler is provided and `maskOnChange={false}`
+_N.B. If an `handleChange` handler is provided and `maskOnChange={false}`
 it is the responsibility of the calling code to ensure that the `value`
 prop is updated with the new value_
 
 <Playground>
   <DurationInputMask
-    onChange={(parsedValue, maskedValue, rawValue) => {
-      console.log('onChange', parsedValue, maskedValue, rawValue);
+    handleChange={(parsedValue, maskedValue, rawValue) => {
+      console.log('handleChange', parsedValue, maskedValue, rawValue);
     }}
     value={61}
   />

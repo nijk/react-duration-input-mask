@@ -10,8 +10,8 @@ const propTypes = {
   autoFocus: PropTypes.bool,
   component: PropTypes.node,
   maskOnChange: PropTypes.bool,
-  onBlur: PropTypes.func,
-  onChange: PropTypes.func,
+  handleBlur: PropTypes.func,
+  handleChange: PropTypes.func,
   onKeyDown: PropTypes.func,
   onKeyUp: PropTypes.func,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -24,8 +24,8 @@ class DurationInputMask extends PureComponent {
     autoFocus: false,
     component: 'input',
     maskOnChange: true,
-    onBlur: null,
-    onChange: null,
+    handleBlur: null,
+    handleChange: null,
     onKeyDown: null,
     onKeyUp: null,
     value: '',
@@ -63,30 +63,30 @@ class DurationInputMask extends PureComponent {
     }
   }
 
-  onBlur = () => {
+  handleBlur = () => {
     const { value } = this.state;
-    const { onBlur } = this.props;
+    const { handleBlur } = this.props;
     const nextValue = this.mask(value);
 
     this.setState({ value: nextValue }, () => {
-      if (isFunction(onBlur)) {
-        onBlur(this.convertToInteger(value), nextValue, value);
+      if (isFunction(handleBlur)) {
+        handleBlur(this.convertToInteger(value), nextValue, value);
       }
     });
   };
 
-  onChange = (event) => {
-    const { onChange, maskOnChange } = this.props;
+  handleChange = (event) => {
+    const { handleChange, maskOnChange } = this.props;
     const { value } = event.target;
     const nextValue = this.mask(value);
-    const hasOnChangeFunction = isFunction(onChange);
+    const hasOnChangeFunction = isFunction(handleChange);
 
     if (hasOnChangeFunction && !maskOnChange) {
-      onChange(this.convertToInteger(value), nextValue, value);
+      handleChange(this.convertToInteger(value), nextValue, value);
     } else {
       this.setState({ value: maskOnChange ? nextValue : value }, () => {
         if (hasOnChangeFunction) {
-          onChange(this.convertToInteger(value), nextValue, value);
+          handleChange(this.convertToInteger(value), nextValue, value);
         }
       });
     }
@@ -166,9 +166,9 @@ class DurationInputMask extends PureComponent {
 
     return (
       <ComponentProp
-        {...omit(props, Object.keys(propTypes))}
-        onBlur={this.onBlur}
-        onChange={this.onChange}
+        {...omit(this.props, Object.keys(propTypes))}
+        onBlur={this.handleBlur}
+        onChange={this.handleChange}
         onKeyDown={this.onKeyDown}
         onKeyUp={this.onKeyUp}
         ref={(ref) => { this.ref = ref; }}

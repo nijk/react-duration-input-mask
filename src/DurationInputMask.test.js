@@ -129,10 +129,10 @@ describe('Handles props', () => {
     expect(wrapper.state('value')).toEqual(nextValue);
   });
 
-  it('state not updated when props.maskOnChange=false & props.onChange={fn}', () => {
+  it('state not updated when props.maskOnChange=false & props.handleChange={fn}', () => {
     const value = '2m';
     const wrapper = shallow(
-      <DurationInputMask value={value} onChange={jest.fn()} maskOnChange={false} />,
+      <DurationInputMask value={value} handleChange={jest.fn()} maskOnChange={false} />,
     );
 
     wrapper.simulate('change', { target: { value: '2m 1s' } });
@@ -151,26 +151,26 @@ describe('Handles props', () => {
 });
 
 describe('Calls handlers', () => {
-  it('props.onBlur called', () => {
+  it('props.handleBlur called', () => {
     const mockHandler = jest.fn();
     const value = 121;
     const maskedValue = '2m 1s';
     const parsedValue = value;
     const rawValue = maskedValue;
-    const wrapper = mount(<DurationInputMask value={value} onBlur={mockHandler} />);
+    const wrapper = mount(<DurationInputMask value={value} handleBlur={mockHandler} />);
 
     wrapper.simulate('blur');
 
     expect(mockHandler).toHaveBeenCalledWith(parsedValue, maskedValue, rawValue);
   });
 
-  it('props.onChange called', () => {
+  it('props.handleChange called', () => {
     const mockHandler = jest.fn();
     const value = 61;
     const nextValue = '1m 61s';
     const maskedNextValue = '2m 1s';
     const parsedNextValue = 121;
-    const wrapper = shallow(<DurationInputMask value={value} onChange={mockHandler} />);
+    const wrapper = shallow(<DurationInputMask value={value} handleChange={mockHandler} />);
     const event = { target: { value: nextValue } };
 
     wrapper.simulate('change', event);
@@ -178,14 +178,14 @@ describe('Calls handlers', () => {
     expect(mockHandler).toHaveBeenCalledWith(parsedNextValue, maskedNextValue, nextValue);
   });
 
-  it('props.onChange called when proops.maskOnChange=false', () => {
+  it('props.handleChange called when proops.maskOnChange=false', () => {
     const mockHandler = jest.fn();
     const value = 61;
     const nextValue = '1m 61s';
     const maskedNextValue = '2m 1s';
     const parsedNextValue = 121;
     const wrapper = shallow(
-      <DurationInputMask value={value} onChange={mockHandler} maskOnChange={false} />,
+      <DurationInputMask value={value} handleChange={mockHandler} maskOnChange={false} />,
     );
     const event = { target: { value: nextValue } };
 
