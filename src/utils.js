@@ -7,3 +7,5 @@ export const omit = (target = {}, keys = []) => reduceTargetKeys(
 );
 
 export const isFunction = fn => Object.prototype.toString.call(fn) === '[object Function]';
+
+export const isNumber = n => Object.prototype.toString.call(n) === '[object Number]';

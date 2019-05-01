@@ -4,6 +4,8 @@ import { mount, shallow } from 'enzyme';
 // SuT
 import DurationInputMask from './DurationInputMask';
 
+jest.useFakeTimers();
+
 describe('Default behaviour', () => {
   it('renders an input', () => {
     const wrapper = shallow(<DurationInputMask />);
@@ -17,13 +19,12 @@ describe('Default behaviour', () => {
   });
 
   it('sets state.value', () => {
-    const value = '2m';
+    const value = 121;
     const wrapper = shallow(<DurationInputMask value={value} />);
-    const nextValue = '2m 1s';
-    const event = { target: { value: nextValue } };
+    const event = { target: { value } };
 
     wrapper.simulate('change', event);
-    expect(wrapper.state('value')).toEqual(nextValue);
+    expect(wrapper.state('value')).toEqual(value);
   });
 });
 
@@ -118,27 +119,6 @@ describe('Handles props', () => {
     expect(ref.focus).toHaveBeenCalled();
   });
 
-  it('value not masked when props.maskOnChange=false', () => {
-    const value = '2m';
-    const nextValue = '62m';
-    const wrapper = shallow(
-      <DurationInputMask value={value} maskOnChange={false} />,
-    );
-
-    wrapper.simulate('change', { target: { value: nextValue } });
-    expect(wrapper.state('value')).toEqual(nextValue);
-  });
-
-  it('state not updated when props.maskOnChange=false & props.handleChange={fn}', () => {
-    const value = '2m';
-    const wrapper = shallow(
-      <DurationInputMask value={value} handleChange={jest.fn()} maskOnChange={false} />,
-    );
-
-    wrapper.simulate('change', { target: { value: '2m 1s' } });
-    expect(wrapper.state('value')).toEqual(value);
-  });
-
   it('event.target.value=undefined handled gracefully', () => {
     const value = 61;
     const wrapper = shallow(<DurationInputMask value={value} />);
@@ -146,7 +126,43 @@ describe('Handles props', () => {
 
     wrapper.simulate('change', event);
 
-    expect(wrapper.state('value')).toEqual('');
+    expect(wrapper.state('value')).toEqual();
+  });
+
+  it('props value is masked on setTimeout', (done) => {
+    const value = 61;
+    const delay = 250;
+    const delayInMilliseconds = delay / 1000;
+    const nextValue = '1m 1s';
+    const wrapper = shallow(
+      <DurationInputMask maskDelay={delay} value={value} />,
+    );
+    const mockHandleMaskDelay = jest.spyOn(wrapper.instance(), 'handleMaskDelay');
+
+    const before = performance.now();
+
+    wrapper.simulate('change', { target: { value } });
+
+    mockHandleMaskDelay(value, nextValue);
+
+    const after = performance.now();
+
+    expect(wrapper.state('value')).toEqual(nextValue);
+    expect(after - before).toBeGreaterThan(delayInMilliseconds);
+    done();
+  });
+
+  it('props value is masked immediately onBlur even if maskDelay is set', () => {
+    const value = 61;
+    const delay = 1000;
+    const nextValue = '1m 1s';
+    const wrapper = shallow(
+      <DurationInputMask maskDelay={delay} value={value} />,
+    );
+
+    wrapper.simulate('blur');
+
+    expect(wrapper.state('value')).toEqual(nextValue);
   });
 });
 
@@ -178,20 +194,45 @@ describe('Calls handlers', () => {
     expect(mockHandler).toHaveBeenCalledWith(parsedNextValue, maskedNextValue, nextValue);
   });
 
-  it('props.handleChange called when proops.maskOnChange=false', () => {
-    const mockHandler = jest.fn();
+  it('handleMaskDelay called when props.maskOnDelay is set', (done) => {
     const value = 61;
-    const nextValue = '1m 61s';
-    const maskedNextValue = '2m 1s';
-    const parsedNextValue = 121;
+    const delay = 250;
+    const mockHasChangeFunction = false;
+    const nextValue = '1m 1s';
     const wrapper = shallow(
-      <DurationInputMask value={value} handleChange={mockHandler} maskOnChange={false} />,
+      <DurationInputMask maskDelay={delay} value={value} />,
     );
-    const event = { target: { value: nextValue } };
+    const mockHandleMaskDelay = jest.spyOn(wrapper.instance(), 'handleMaskDelay');
 
-    wrapper.simulate('change', event);
+    wrapper.simulate('change', { target: { value } });
 
-    expect(mockHandler).toHaveBeenCalledWith(parsedNextValue, maskedNextValue, nextValue);
+    expect(mockHandleMaskDelay).toHaveBeenCalledTimes(0);
+
+    jest.advanceTimersByTime(delay);
+
+    expect(mockHandleMaskDelay).toHaveBeenCalledTimes(1);
+    expect(mockHandleMaskDelay).toHaveBeenCalledWith(value, nextValue, mockHasChangeFunction);
+    done();
+  });
+
+  it('props.handleChange callback called when set with maskDelay', (done) => {
+    const mockHandleChange = jest.fn();
+    const delay = 250;
+    const value = 121;
+    const nextValue = '2m 1s';
+    const maskedNextValue = nextValue;
+    const parsedNextValue = value;
+    const wrapper = shallow(
+      <DurationInputMask value={value} maskDelay={delay} handleChange={mockHandleChange} />,
+    );
+
+    wrapper.simulate('change', { target: { value } });
+
+    jest.advanceTimersByTime(delay);
+
+    expect(mockHandleChange).toHaveBeenCalledTimes(1);
+    expect(mockHandleChange).toHaveBeenCalledWith(parsedNextValue, maskedNextValue, value);
+    done();
   });
 
   it('props.onKeyDown called', () => {
@@ -223,5 +264,42 @@ describe('Calls handlers', () => {
         nativeEvent: expect.any(Object),
       }),
     );
+  });
+
+  describe('Handles timer', () => {
+    it('should clear timer onBlur', () => {
+      const delay = 1000;
+      const value = 61;
+
+      const wrapper = shallow(
+        <DurationInputMask value={value} maskDelay={delay} />,
+      );
+      wrapper.simulate('change', { target: { value } });
+
+      const mockClearTimeout = jest.spyOn(window, 'clearTimeout');
+
+      wrapper.simulate('blur');
+
+      expect(mockClearTimeout).toHaveBeenCalledTimes(1);
+    });
+
+    it('should clear timer onChange', () => {
+      const delay = 1000;
+      const value = 61;
+      const nextValue = 121;
+
+      const wrapper = shallow(
+        <DurationInputMask value={value} maskDelay={delay} />,
+      );
+      wrapper.simulate('change', { target: { value } });
+
+      jest.advanceTimersByTime(500);
+
+      wrapper.simulate('change', { target: { value: nextValue } });
+
+      const mockClearTimeout = jest.spyOn(window, 'clearTimeout');
+
+      expect(mockClearTimeout).toHaveBeenCalledTimes(1);
+    });
   });
 });
