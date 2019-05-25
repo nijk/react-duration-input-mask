@@ -38,6 +38,7 @@
     "babel-jest": "^23.6.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "cypress": "^3.3.1",
     "docz": "^1.0.3",
     "docz-theme-default": "^1.0.3",
     "enzyme": "^3.4.0",
@@ -70,7 +71,8 @@
     "prepare": "yarn build",
     "start": "docz dev",
     "test": "jest",
-    "test:dev": "jest --watch --verbose false"
+    "test:dev": "jest --watch --verbose false",
+    "test:e2e": "cypress run --spec cypress/integration/duration_input_mask_spec.js --browser chrome"
   },
   "husky": {
     "hooks": {
