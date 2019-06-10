@@ -50,6 +50,8 @@ class DurationInputMask extends PureComponent {
       value: this.mask(props.value),
     };
 
+    console.log('process.env.FOO', process.env.FOO);
+
     this.ref = null;
   }
 

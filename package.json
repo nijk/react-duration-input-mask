@@ -23,6 +23,8 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.1.2",
+    "babel-plugin-dotenv": "^0.1.1",
+    "dotenv": "^8.0.0",
     "string.prototype.matchall": "^3.0.1"
   },
   "devDependencies": {

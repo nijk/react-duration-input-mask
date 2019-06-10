@@ -21,6 +21,10 @@ module.exports = (on, config) => {
     }
   })
 
+  const { parsed: env } = require('dotenv').config();
+
+  console.log('env', env);
+
   on('before:browser:launch', (browser = {}, args) => {
     // browser will look something like this
     // {

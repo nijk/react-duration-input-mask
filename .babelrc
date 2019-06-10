@@ -41,6 +41,9 @@
   "plugins": [
     "@babel/plugin-transform-spread",
     "@babel/plugin-proposal-class-properties",
-    "transform-react-remove-prop-types"
+    "transform-react-remove-prop-types",
+    ["babel-plugin-dotenv", {
+      "replacedModuleName": ".env"
+    }]
   ]
 }

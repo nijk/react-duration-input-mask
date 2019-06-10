@@ -64,3 +64,6 @@ typings/
 .docz
 dist
 demo/index.min.js
+
+# Test
+cypress/screenshots
