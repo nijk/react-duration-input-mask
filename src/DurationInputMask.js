@@ -162,7 +162,7 @@ class DurationInputMask extends PureComponent {
 
   render() {
     const { value } = this.state;
-    const { component: ComponentProp, ...props } = this.props;
+    const { component: ComponentProp } = this.props;
 
     return (
       <ComponentProp
