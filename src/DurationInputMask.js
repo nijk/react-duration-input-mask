@@ -146,7 +146,7 @@ class DurationInputMask extends PureComponent {
     const seconds = intValue % this.minute;
 
     const duration = {
-      d: intValue > this.day ? Math.floor(intValue / this.day) : 0,
+      d: intValue >= this.day ? Math.floor(intValue / this.day) : 0,
       h: hours > 0 ? Math.floor(hours / this.hour) : 0,
       m: minutes > 0 ? Math.floor(minutes / this.minute) : 0,
       s: seconds,

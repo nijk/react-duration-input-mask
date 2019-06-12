@@ -148,6 +148,75 @@ describe('Handles props', () => {
 
     expect(wrapper.state('value')).toEqual('');
   });
+
+  describe('one day', () => {
+    it('24h is masked to 1d', () => {
+      const value = '24h';
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1d');
+    });
+
+    it('1440m is masked to 1d', () => {
+      const value = '1440m';
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1d');
+    });
+
+    it('86400s is masked to 1d', () => {
+      const value = '86400s';
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1d');
+    });
+
+    it('86400 is masked to 1d', () => {
+      const value = 86400;
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1d');
+    });
+  });
+
+  describe('one hour', () => {
+    it('60m is masked to 1h', () => {
+      const value = '60m';
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1h');
+    });
+
+    it('3600s is masked to 1h', () => {
+      const value = '3600s';
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1h');
+    });
+
+    it('3600 is masked to 1h', () => {
+      const value = 3600;
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1h');
+    });
+  });
+
+  describe('one minute', () => {
+    it('60s is masked to 1m', () => {
+      const value = '60s';
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1m');
+    });
+
+    it('60 is masked to 1m', () => {
+      const value = 60;
+      const wrapper = shallow(<DurationInputMask value={value} />);
+
+      expect(wrapper.state('value')).toEqual('1m');
+    });
+  });
 });
 
 describe('Calls handlers', () => {
