@@ -16,6 +16,11 @@ Runs the docz dev server with file watching:
 
 `yarn start`
 
+#### Git
+To avoid issues with merge conflicts on `.size-snapshot.json`,
+set a merge driver:
+`git config merge.ours.driver true`
+
 #### Tests
 Run on push via husky and can be run separately:
 

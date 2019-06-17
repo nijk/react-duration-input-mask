@@ -25,14 +25,13 @@ import DurationInputMask from './DurationInputMask'
     handleBlur={(parsedValue, maskedValue, rawValue) => {
       console.log('handleBlur', parsedValue, maskedValue, rawValue);
     }}
-    maskOnChange={false}
     value={61}
   />
 </Playground>
 
 #### handleChange `handleChange={ (parsedValue, maskedValue, rawValue) => ... }`
 
-_N.B. If an `handleChange` handler is provided and `maskOnChange={false}`
+_N.B. If an `handleChange` handler is provided and `maskDelay` has not been set,
 it is the responsibility of the calling code to ensure that the `value`
 prop is updated with the new value_
 
@@ -43,6 +42,12 @@ prop is updated with the new value_
     }}
     value={61}
   />
+</Playground>
+
+#### maskDelay `maskDelay={500}`
+
+<Playground>
+  <DurationInputMask maskDelay={500} value={61} />
 </Playground>
 
 #### onKeyDown `onKeyDown={ (event) => ... }`

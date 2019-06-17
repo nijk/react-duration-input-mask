@@ -2,14 +2,18 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import matchAll from 'string.prototype.matchall';
 
-import { isFunction, omit } from './utils';
+// Utils
+import { isFunction, isNumber, omit } from './utils';
+
+// Polyfill
+import './polyfills/trimStart';
 
 matchAll.shim();
 
 const propTypes = {
   autoFocus: PropTypes.bool,
   component: PropTypes.node,
-  maskOnChange: PropTypes.bool,
+  maskDelay: PropTypes.number,
   handleBlur: PropTypes.func,
   handleChange: PropTypes.func,
   onKeyDown: PropTypes.func,
@@ -23,7 +27,7 @@ class DurationInputMask extends PureComponent {
   static defaultProps = {
     autoFocus: false,
     component: 'input',
-    maskOnChange: true,
+    maskDelay: null,
     handleBlur: null,
     handleChange: null,
     onKeyDown: null,
@@ -36,6 +40,8 @@ class DurationInputMask extends PureComponent {
   hour = 60 * this.minute;
 
   day = 24 * this.hour;
+
+  timer = null;
 
   constructor(props) {
     super();
@@ -53,6 +59,8 @@ class DurationInputMask extends PureComponent {
     if (autoFocus && this.ref) {
       this.ref.focus();
     }
+
+    this.timer = null;
   }
 
   componentDidUpdate(prevProps) {
@@ -64,6 +72,10 @@ class DurationInputMask extends PureComponent {
   }
 
   handleBlur = () => {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
     const { value } = this.state;
     const { handleBlur } = this.props;
     const nextValue = this.mask(value);
@@ -76,20 +88,44 @@ class DurationInputMask extends PureComponent {
   };
 
   handleChange = (event) => {
-    const { handleChange, maskOnChange } = this.props;
-    const { value } = event.target;
+    const { handleChange, maskDelay } = this.props;
+    let { value = '' } = event.target;
     const nextValue = this.mask(value);
     const hasOnChangeFunction = isFunction(handleChange);
+    const hasMaskDelay = isNumber(maskDelay) && maskDelay >= 0;
 
-    if (hasOnChangeFunction && !maskOnChange) {
-      handleChange(this.convertToInteger(value), nextValue, value);
-    } else {
-      this.setState({ value: maskOnChange ? nextValue : value }, () => {
-        if (hasOnChangeFunction) {
-          handleChange(this.convertToInteger(value), nextValue, value);
-        }
-      });
+    if (this.timer) {
+      clearTimeout(this.timer);
     }
+
+    // Mask immediately
+    if (maskDelay === 0) {
+      value = nextValue;
+    }
+
+    this.setState({ value }, () => {
+      if (hasOnChangeFunction && !hasMaskDelay) {
+        handleChange(this.convertToInteger(value), nextValue, value);
+      }
+
+      if (hasMaskDelay) {
+        this.timer = setTimeout(() => this.handleMaskDelay(
+          value,
+          nextValue,
+          hasOnChangeFunction,
+        ), maskDelay);
+      }
+    });
+  };
+
+  handleMaskDelay = (value, nextValue, hasOnChangeFunction) => {
+    const { handleChange } = this.props;
+
+    this.setState({ value: nextValue }, () => {
+      if (hasOnChangeFunction) {
+        handleChange(this.convertToInteger(value), nextValue, value);
+      }
+    });
   };
 
   onKeyDown = (event) => {
