@@ -1,36 +1,36 @@
 {
   "dist/index.cjs.js": {
-    "bundled": 14955,
-    "minified": 8611,
-    "gzipped": 2813
+    "bundled": 15150,
+    "minified": 8648,
+    "gzipped": 2835
   },
   "dist/index.cjs.min.js": {
-    "bundled": 14955,
-    "minified": 8611,
-    "gzipped": 2813
+    "bundled": 15150,
+    "minified": 8648,
+    "gzipped": 2835
   },
   "dist/index.esm.js": {
-    "bundled": 14738,
-    "minified": 8444,
-    "gzipped": 2763,
+    "bundled": 14933,
+    "minified": 8481,
+    "gzipped": 2784,
     "treeshaked": {
       "rollup": {
-        "code": 6983,
+        "code": 7020,
         "import_statements": 108
       },
       "webpack": {
-        "code": 8070
+        "code": 8107
       }
     }
   },
   "dist/index.umd.js": {
-    "bundled": 94453,
-    "minified": 44229,
-    "gzipped": 11927
+    "bundled": 94656,
+    "minified": 44266,
+    "gzipped": 11950
   },
   "dist/index.umd.min.js": {
-    "bundled": 94453,
-    "minified": 44229,
-    "gzipped": 11927
+    "bundled": 94656,
+    "minified": 44266,
+    "gzipped": 11950
   }
 }

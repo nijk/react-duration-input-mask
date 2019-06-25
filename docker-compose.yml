@@ -1,0 +1,15 @@
+version: "2"
+services:
+  node:
+    container_name: "app"
+    image: "node:10"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - "8080:8080"
+    command: "yarn run docz:serve"
+
