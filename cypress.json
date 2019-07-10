@@ -1,3 +1,5 @@
 {
-  "baseUrl": "https://react-duration-input-mask.netlify.com"
+  "baseUrl": "https://react-duration-input-mask.netlify.com",
+  "ignoreTestFiles": ["**/examples/*.js", "**/common/*.js"],
+  "testFiles": "**/*.feature"
 }

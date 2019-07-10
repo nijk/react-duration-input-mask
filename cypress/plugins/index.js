@@ -10,16 +10,18 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+const cucumber = require('cypress-cucumber-preprocessor').default;
 
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   on('task', {
     log (message) {
-      Array.isArray(message) ? console.log.apply(null, message) : console.log(message)
-      return null
+      Array.isArray(message) ? console.log.apply(null, message) : console.log(message);
+
+      return null;
     }
-  })
+  });
 
   const { parsed: env } = require('dotenv').config();
 
@@ -36,10 +38,12 @@ module.exports = (on, config) => {
     // }
 
     if (browser.name === 'chrome') {
-      args.push('--start-fullscreen')
+      args.push('--start-fullscreen');
 
       // whatever you return here becomes the new args
-      return args
+      return args;
     }
-  })
-}
+  });
+
+  on('file:preprocessor', cucumber());
+};
