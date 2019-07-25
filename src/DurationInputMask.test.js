@@ -34,6 +34,12 @@ describe('Handles props', () => {
     expect(wrapper.prop('value')).toEqual('');
   });
 
+  it('props.defaultValue is handled', () => {
+    const wrapper = shallow(<DurationInputMask defaultValue={0} />);
+
+    expect(wrapper.prop('value')).toEqual(0);
+  });
+
   it('props.value (number) is masked', () => {
     const value = 121;
     const wrapper = shallow(<DurationInputMask value={value} />);

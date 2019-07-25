@@ -13,6 +13,7 @@ matchAll.shim();
 const propTypes = {
   autoFocus: PropTypes.bool,
   component: PropTypes.node,
+  defaultValue: PropTypes.any,
   maskDelay: PropTypes.number,
   handleBlur: PropTypes.func,
   handleChange: PropTypes.func,
@@ -27,6 +28,7 @@ class DurationInputMask extends PureComponent {
   static defaultProps = {
     autoFocus: false,
     component: 'input',
+    defaultValue: '',
     maskDelay: null,
     handleBlur: null,
     handleChange: null,
@@ -47,7 +49,7 @@ class DurationInputMask extends PureComponent {
     super();
 
     this.state = {
-      value: this.mask(props.value),
+      value: this.mask(props.value, props),
     };
 
     this.ref = null;
@@ -174,7 +176,8 @@ class DurationInputMask extends PureComponent {
     }, 0);
   }
 
-  mask(value) {
+  mask(value, props = this.props) {
+    const { defaultValue } = props;
     const intValue = this.convertToInteger(value);
 
     const hours = intValue % this.day;
@@ -188,12 +191,14 @@ class DurationInputMask extends PureComponent {
       s: seconds,
     };
 
-    return Object.keys(duration)
+    const nextValue = Object.keys(duration)
       .reduce((prev, key) => {
         const durationValue = duration[key];
         return durationValue ? `${prev} ${durationValue}${key}` : prev;
       }, '')
       .trimStart();
+
+    return nextValue || defaultValue;
   }
 
   render() {
