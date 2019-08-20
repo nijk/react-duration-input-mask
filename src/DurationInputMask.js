@@ -13,7 +13,7 @@ matchAll.shim();
 const propTypes = {
   autoFocus: PropTypes.bool,
   component: PropTypes.node,
-  defaultValue: PropTypes.any,
+  defaultValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   maskDelay: PropTypes.number,
   handleBlur: PropTypes.func,
   handleChange: PropTypes.func,
