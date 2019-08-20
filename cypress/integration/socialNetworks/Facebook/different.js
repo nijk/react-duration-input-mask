@@ -4,6 +4,7 @@ const url = 'https://facebook.com';
 
 Given(`I kinda open Facebook page`, () => {
   cy.visit(url);
+  cy.route();
 });
 
 // This is the same step that we have in news/Google/different.js, but you don't have to worry about collisions!
